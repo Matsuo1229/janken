@@ -143,6 +143,10 @@ class Client:
             self.ws.send(obj)
 
 async def main():
+
+    print("main start")
+    
+    pygame.init()
     global hand_1, hand_2, idx,hand_1, dokuji_1,sent,kati,make
 
     kati, make = 0, 0
@@ -156,6 +160,11 @@ async def main():
     screen.fill(BLACK)
 
     client = Client("wss://jankenserver.my-647.workers.dev/")
+    print("websocket created")
+    
+
+    while not client.connected:
+        await asyncio.sleep(0.1)
 #    client = None
 
 
@@ -165,6 +174,8 @@ async def main():
     running = True
 
     while running:
+
+        print("loop")
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -211,8 +222,7 @@ async def main():
 
                 pygame.display.update()
 
-                await check()
-                await asyncio.sleep(0)
+                
                     
 
                 if event.key == pygame.K_RETURN:
@@ -264,7 +274,8 @@ async def main():
                 txt_6 = font.render("負け", True, WHITE)
                 screen.blit(txt_6, [350, 200])
                 make += 1
-
+                
+            await asyncio.sleep(2)
             idx = 0
 
         if kati == 3 or make ==3:
