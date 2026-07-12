@@ -22,7 +22,7 @@ async def check():#出された手の変化
 
     if HAND[0] in rireki_1:#無限の処理
         if hand_1 == HAND[0]:
-            rireki.remove(HAND[1])
+            rireki_1.remove(HAND[1])
         else:
             hand_1 = HAND[1]
 
@@ -37,7 +37,7 @@ async def check():#出された手の変化
         elif hand_1 == hand[2]:
             hand_1 = dokuji_1
 
-        elif hand_1 == dokuji:
+        elif hand_1 == dokuji_1:
             hand_1 = hand[0]
     if hand_1 == HAND[2]:
         if HAND[2] in effect:
@@ -93,10 +93,10 @@ async def battle():
             result = 0
 
     if hand_1 == HAND[1]:
-        if rireki.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
+        if rireki_1.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
             result = 1
             if hand_2 == HAND[1]:
-                if rireki.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
+                if rireki_1.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
                     result = 0
                     
     await asyncio.sleep(0)
@@ -143,7 +143,7 @@ async def main():
 
     kati, make = 0, 0
 
-    pygame.mouse.set_.pos((400, 300))
+    pygame.mouse.set_pos((400, 300))
     
     screen = pygame.display.set_mode((800, 600))
     clock = pygame.time.Clock()
@@ -158,7 +158,7 @@ async def main():
     while running:
 
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
                 
@@ -180,7 +180,7 @@ async def main():
                 pygame.display.update()
 
                 if event.type == KEYDOWN:#選択の切り替え
-                    if event.key == K_SPACE:
+                    if event.key == pygame.K_SPACE:
                         if cele == 1:
                             cele += 1
                             screen.blit(txt_1, [150, 400])
@@ -203,10 +203,11 @@ async def main():
 
                     pygame.display.update()
 
-                    check()
+                    await check()
+                    await asyncio.sleep(0)
                         
 
-                    if event.key == K_ENTER:
+                    if event.key == pygame.K_ENTER:
                         if cele == 1:
                             hand_1 = hand[0]
 
