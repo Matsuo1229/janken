@@ -151,6 +151,7 @@ class Client:
 async def main():
 
     print("main開始")
+    raise Exception("テスト")
 
     pygame.init()
 
