@@ -103,41 +103,41 @@ async def battle():
     await asyncio.sleep(0)
                 
 
-class Client:
+#class Client:
+#
+#    def __init__(self, url):
+#        self.connected = False
+#        self.messages = []
 
-    def __init__(self, url):
-        self.connected = False
-        self.messages = []
+#        self.ws = window.WebSocket.new(url)
 
-        self.ws = window.WebSocket.new(url)
+#        self.ws.onopen = self.on_open
+#        self.ws.onmessage = self.on_message
+#        self.ws.onclose = self.on_close
+#        self.ws.onerror = self.on_error
 
-        self.ws.onopen = self.on_open
-        self.ws.onmessage = self.on_message
-        self.ws.onclose = self.on_close
-        self.ws.onerror = self.on_error
-
-    def on_open(self, event):
+#    def on_open(self, event):
 #        print("接続成功")
-        self.connected = True
+#        self.connected = True
 
-    def on_message(self, event):
-        global hand_2,recieve
+#    def on_message(self, event):
+#        global hand_2,recieve
 #        print("受信:", event.data)
-        recieve = 0
-        self.messages.append(event.data)
-        hand_2 = event.data
-        recieve = 1
+#        recieve = 0
+#        self.messages.append(event.data)
+#        hand_2 = event.data
+#        recieve = 1
 
-    def on_close(self, event):
+#    def on_close(self, event):
 #        print("切断")
-        self.connected = False
+#        self.connected = False
 
-    def on_error(self, event):
+#    def on_error(self, event):
 #        print("エラー")
 
-    def send(self, obj):
-        if self.connected:
-            self.ws.send(obj)
+#    def send(self, obj):
+#        if self.connected:
+#            self.ws.send(obj)
 
 async def main():
     global hand_1, hand_2, idx,hand_1, dokuji_1,sent,kati,make
