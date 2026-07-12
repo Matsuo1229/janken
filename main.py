@@ -259,7 +259,7 @@ async def main():
         if kati == 3 or make ==3:
             idx = 3
                 
-            
+        pygame.display.flip()    
         clock.tick(60)
         await asyncio.sleep(0)
 
