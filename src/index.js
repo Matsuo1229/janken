@@ -1,11 +1,25 @@
-export { GameRoom }
+Python 3.9.0 (tags/v3.9.0:9cf6752, Oct  5 2020, 15:34:40) [MSC v.1927 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license()" for more information.
+>>> export default {
+  async fetch(request) {
 
-export default {
-  async fetch(request, env) {
+    if (request.headers.get("Upgrade") !== "websocket") {
+      return new Response("WebSocket Server");
+    }
 
-    const id = env.GAME_ROOM.idFromName("main");
-    const stub = env.GAME_ROOM.get(id);
+    const pair = new WebSocketPair();
+    const client = pair[0];
+    const server = pair[1];
 
-    return stub.fetch(request);
+    server.accept();
+
+    server.addEventListener("message", event => {
+        server.send(event.data);
+    });
+
+    return new Response(null, {
+      status:101,
+      webSocket:client
+    });
   }
 }
