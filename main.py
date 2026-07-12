@@ -155,8 +155,8 @@ async def main():
 
     screen.fill(BLACK)
 
-#    client = Client("wss://jankenserver.my-647.workers.dev/")
-    client = None
+    client = Client("wss://jankenserver.my-647.workers.dev/")
+#    client = None
 
 
     
