@@ -149,6 +149,8 @@ async def main():
     clock = pygame.time.Clock()
     font = pygame.font.SysFont(None, 30)
 
+    screen.fill(BLACK)
+
     client = Client("wss://jankenserver.my-647.workers.dev/")
 
     dokuji_1 = random.choice(HAND)
