@@ -54,46 +54,50 @@ async def check():#出された手の変化
     
 
 async def battle():
-    global result
-        if hand_1 == hand[0]:
-            if hand_2 == hand[0]
-                result = 0
+    global result, result_2
+    if hand_1 == hand[0]:
+        if hand_2 == hand[0]:
+            result = 0
 
-            elif hand_2 == hand[1]:
-                result = 1
+        elif hand_2 == hand[1]:
+            result = 1
 
-            elif hand_2 == hand[2]:
-                result = -1
-
-        if hand_1 == hand[1]:
-            if hand_2 == hand[0]
-                result = -1
-
-            elif hand_2 == hand[1]:
-                result = 0
-
-            elif hand_2 == hand[2]:
-                result = 1
-
-        if hand_1 == hand[2]:
-            if hand_2 == hand[0]
-                result = 1
-
-            elif hand_2 == hand[1]:
-                result = -1
-
-            elif hand_2 == hand[2]:
-                result = 0
-
-        if hand_1 == HAND[0]:
+        elif hand_2 == hand[2]:
             result = -1
 
-        if hand_1 == HAND[1]:
-            rireki.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
-                result = 1
+    if hand_1 == hand[1]:
+        if hand_2 == hand[0]:
+            result = -1
 
-        client.send(result)
-        await asyncio.sleep(0)
+        elif hand_2 == hand[1]:
+            result = 0
+
+        elif hand_2 == hand[2]:
+            result = 1
+
+    if hand_1 == hand[2]:
+        if hand_2 == hand[0]:
+            result = 1
+
+        elif hand_2 == hand[1]:
+            result = -1
+
+        elif hand_2 == hand[2]:
+            result = 0
+
+    if hand_1 == HAND[0]:
+        result = -1
+        if hand_2 == HAND[0]:
+            result = 0
+
+    if hand_1 == HAND[1]:
+        if rireki.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
+            result = 1
+            if hand_2 == HAND[1]:
+                if rireki.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
+                    result = 0
+                    
+    await asyncio.sleep(0)
                 
 
 class Client:
@@ -108,12 +112,10 @@ class Client:
         self.ws.onmessage = self.on_message
         self.ws.onclose = self.on_close
         self.ws.onerror = self.on_error
-        await asyncio.sleep(0)
 
     def on_open(self, event):
 #        print("接続成功")
         self.connected = True
-        await asyncio.sleep(0)
 
     def on_message(self, event):
         global hand_2,recieve
@@ -122,21 +124,17 @@ class Client:
         self.messages.append(data)
         hand_2 = data
         recieve = 1
-        await asyncio.sleep(0)
 
     def on_close(self, event):
 #        print("切断")
         self.connected = False
-        await asyncio.sleep(0)
 
     def on_error(self, event):
 #        print("エラー")
-        await asyncio.sleep(0)
 
     def send(self, obj):
         if self.connected:
             self.ws.send(text)
-        await asyncio.sleep(0)
 
 async def main():
     global hand_1, hand_2, idx,hand_1, dokuji_1,sent,kati,make
@@ -240,16 +238,16 @@ async def main():
             await battle()
             await asyncio.sleep(0)
             
-            if hand_2 == result:
+            if 0 == result:
                 txt_6 = font.render("あいこ", True, WHITE)
                 screen.blit(txt_6, [350, 200])
 
-            if result >> 1:
+            if result == 1:
                 txt_6 = font.render("勝ち", True, WHITE)
                 screen.blit(txt_6, [350, 200])
                 kati += 1
 
-            if result << 1:
+            if result == -1:
                 txt_6 = font.render("負け", True, WHITE)
                 screen.blit(txt_6, [350, 200])
                 make += 1
