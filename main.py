@@ -168,69 +168,69 @@ async def main():
                 pygame.quit()
                 sys.exit()
                 
-            if idx == 0:
-                sent = 0
+        if idx == 0:
+            sent = 0
                 
-                screen.fill(BLACK)
-                txt_1 = font.render("グー", True, WHITE)
-                txt_2 = font.render("チョキ", True, WHITE)
-                txt_3 = font.render("パー", True, WHITE)
-                txt_4 = font.render(dokuji_1, True, WHITE)
+            screen.fill(BLACK)
+            txt_1 = font.render("グー", True, WHITE)
+            txt_2 = font.render("チョキ", True, WHITE)
+            txt_3 = font.render("パー", True, WHITE)
+            txt_4 = font.render(dokuji_1, True, WHITE)
 
-                screen.blit(txt_1, [150, 350])
-                screen.blit(txt_2, [300, 400])
-                screen.blit(txt_3, [450, 400])
-                screen.blit(txt_4, [600, 400])
+            screen.blit(txt_1, [150, 350])
+            screen.blit(txt_2, [300, 400])
+            screen.blit(txt_3, [450, 400])
+            screen.blit(txt_4, [600, 400])
+
+            pygame.display.update()
+
+            if event.type == pygame.KEYDOWN:#選択の切り替え
+                if event.key == pygame.K_SPACE:
+                    if cele == 1:
+                        cele += 1
+                        screen.blit(txt_1, [150, 400])
+                        screen.blit(txt_2, [300, 350])
+
+                    elif cele == 2:
+                        cele += 1
+                        screen.blit(txt_2, [150, 400])
+                        screen.blit(txt_3, [300, 350])
+
+                    elif cele == 3:
+                        cele += 1
+                        screen.blit(txt_3, [150, 400])
+                        screen.blit(txt_4, [300, 350])
+
+                    elif cele == 4:
+                        cele = 1
+                        screen.blit(txt_4, [300, 400])
+                        screen.blit(txt_1, [150, 350])
 
                 pygame.display.update()
 
-                if event.type == pygame.KEYDOWN:#選択の切り替え
-                    if event.key == pygame.K_SPACE:
-                        if cele == 1:
-                            cele += 1
-                            screen.blit(txt_1, [150, 400])
-                            screen.blit(txt_2, [300, 350])
+                await check()
+                await asyncio.sleep(0)
+                    
 
-                        elif cele == 2:
-                            cele += 1
-                            screen.blit(txt_2, [150, 400])
-                            screen.blit(txt_3, [300, 350])
+                if event.key == pygame.K_RETURN:
+                    if cele == 1:
+                        hand_1 = hand[0]
 
-                        elif cele == 3:
-                            cele += 1
-                            screen.blit(txt_3, [150, 400])
-                            screen.blit(txt_4, [300, 350])
+                    elif cele == 2:
+                        hand_1 = hand[1]
 
-                        elif cele == 4:
-                            cele = 1
-                            screen.blit(txt_4, [300, 400])
-                            screen.blit(txt_1, [150, 350])
+                    elif cele == 3:
+                        hand_1 = hand[2]
 
-                    pygame.display.update()
-
-                    await check()
-                    await asyncio.sleep(0)
-                        
-
-                    if event.key == pygame.K_RETURN:
-                        if cele == 1:
-                            hand_1 = hand[0]
-
-                        elif cele == 2:
-                            hand_1 = hand[1]
-
-                        elif cele == 3:
-                            hand_1 = hand[2]
-
-                        elif cele ==4:
-                            hand_1 = dokuji_1
+                    elif cele ==4:
+                        hand_1 = dokuji_1
 
 
-                        #client.send(hand_1)
-                        if client:
-                            client.send(hand_1)
-                        sent = 1
-                        idx = 1
+                    #client.send(hand_1)
+                    if client:
+                        client.send(hand_1)
+                    sent = 1
+                    idx = 1
 
 
         if idx == 1:
