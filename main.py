@@ -159,8 +159,10 @@ async def main():
 
     print("画面作成完了")
 
-    client = Client("wss://jankenserver.my-647.workers.dev/")
+    #client = Client("wss://jankenserver.my-647.workers.dev/")
+    client = None
 
+    
     print("WebSocket作成完了")
 
     print("main start")
