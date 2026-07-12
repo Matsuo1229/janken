@@ -152,8 +152,11 @@ async def main():
 
     screen.fill(BLACK)
 
-    client = Client("wss://jankenserver.my-647.workers.dev/")
+#    client = Client("wss://jankenserver.my-647.workers.dev/")
+    client = None
 
+
+    
     dokuji_1 = random.choice(HAND)
 
     running = True
@@ -209,7 +212,7 @@ async def main():
                     await asyncio.sleep(0)
                         
 
-                    if event.key == pygame.K_ENTER:
+                    if event.key == pygame.K_RETURN:
                         if cele == 1:
                             hand_1 = hand[0]
 
@@ -223,7 +226,9 @@ async def main():
                             hand_1 = dokuji_1
 
 
-                        client.send(hand_1)
+                        #client.send(hand_1)
+                        if client:
+                            client.send(hand_1)
                         sent = 1
                         idx = 1
 
