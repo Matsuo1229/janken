@@ -222,7 +222,7 @@ async def main():
 
     # ★ Cloudflare Workers URL
     client = Client(
-        "wss://あなたのworker名.workers.dev/"
+        "wss://jankenserver.my-647.workers.dev/"
     )
 
 
