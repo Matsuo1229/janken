@@ -109,34 +109,40 @@ async def battle():
 class Client:
 
     def __init__(self, url):
+
         self.connected = False
         self.messages = []
 
         self.ws = WebSocket.new(url)
 
-        self.ws.onopen = self.on_open
-        self.ws.onmessage = self.on_message
-        self.ws.onclose = self.on_close
-        self.ws.onerror = self.on_error
+        self.ws.addEventListener("open", self.on_open)
+        self.ws.addEventListener("message", self.on_message)
+        self.ws.addEventListener("close", self.on_close)
+        self.ws.addEventListener("error", self.on_error)
+
 
     def on_open(self, event):
         print("接続成功")
         self.connected = True
 
+
     def on_message(self, event):
-        global hand_2,recieve
+        global hand_2, recieve
+
         print("受信:", event.data)
-        recieve = 0
-        self.messages.append(event.data)
+
         hand_2 = event.data
         recieve = 1
+
 
     def on_close(self, event):
         print("切断")
         self.connected = False
 
+
     def on_error(self, event):
         print("WebSocketエラー", event)
+
 
     def send(self, obj):
         if self.connected:
