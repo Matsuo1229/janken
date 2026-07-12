@@ -50,6 +50,8 @@ async def check():#出された手の変化
         
 
     rireki_1.append(hand_1)
+    await asyncio.sleep(0)
+    
 
 async def battle():
     global result
@@ -91,6 +93,7 @@ async def battle():
                 result = 1
 
         client.send(result)
+        await asyncio.sleep(0)
                 
 
 class Client:
@@ -105,10 +108,12 @@ class Client:
         self.ws.onmessage = self.on_message
         self.ws.onclose = self.on_close
         self.ws.onerror = self.on_error
+        await asyncio.sleep(0)
 
     def on_open(self, event):
 #        print("接続成功")
         self.connected = True
+        await asyncio.sleep(0)
 
     def on_message(self, event):
         global hand_2,recieve
@@ -117,17 +122,21 @@ class Client:
         self.messages.append(data)
         hand_2 = data
         recieve = 1
+        await asyncio.sleep(0)
 
     def on_close(self, event):
 #        print("切断")
         self.connected = False
+        await asyncio.sleep(0)
 
     def on_error(self, event):
 #        print("エラー")
+        await asyncio.sleep(0)
 
     def send(self, obj):
         if self.connected:
             self.ws.send(text)
+        await asyncio.sleep(0)
 
 async def main():
     global hand_1, hand_2, idx,hand_1, dokuji_1,sent,kati,make
@@ -226,8 +235,11 @@ async def main():
                 idx = 2
 
         if idx == 2:
-            check()
-            battle()
+            await check()
+            await asyncio.sleep(0)
+            await battle()
+            await asyncio.sleep(0)
+            
             if hand_2 == result:
                 txt_6 = font.render("あいこ", True, WHITE)
                 screen.blit(txt_6, [350, 200])
