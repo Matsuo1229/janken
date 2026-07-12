@@ -1,114 +1,45 @@
-import json
 import pygame
 import asyncio
 import sys
 import random
 from platform import window
 
+
 idx = 0
 effect = []
 rireki_1 = []
+
 result = 0
-recieve = 0
+receive = 0
 cele = 1
+
 hand_1 = ""
 hand_2 = ""
-dokuji_1 = ""
 
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+WHITE = (255,255,255)
+BLACK = (0,0,0)
 
-HAND = ("無限", "創造の儀式", "混逆の魂")
-hand = ["グー", "チョキ", "パー"]
+HAND = (
+    "無限",
+    "創造の儀式",
+    "混逆の魂"
+)
 
-async def check():#出された手の変化
-    global hand_1, rireki_1
-
-    if HAND[0] in rireki_1:#無限の処理
-        if hand_1 == HAND[0]:
-            rireki_1.remove(HAND[1])
-        else:
-            hand_1 = HAND[1]
+hand = [
+    "グー",
+    "チョキ",
+    "パー"
+]
 
 
-    if HAND[2] in effect:#混逆の魂
-        if hand_1 == hand[0]:
-            hand_1 = hand[1]
-
-        elif hand_1 == hand[1]:
-            hand_1 = hand[2]
-
-        elif hand_1 == hand[2]:
-            hand_1 = dokuji_1
-
-        elif hand_1 == dokuji_1:
-            hand_1 = hand[0]
-    if hand_1 == HAND[2]:
-        if HAND[2] in effect:
-            effect.remove(HAND[2])
-        else:
-            effect.append(HAND[2])
-    if hand_2 == HAND[2]:
-        if HAND[2] in effect:
-            effect.remove(HAND[2])
-        else:
-            effect.append(HAND[2])
-        
-
-    rireki_1.append(hand_1)
-    await asyncio.sleep(0)
-    
-
-async def battle():
-    global result, result_2
-    if hand_1 == hand[0]:
-        if hand_2 == hand[0]:
-            result = 0
-
-        elif hand_2 == hand[1]:
-            result = 1
-
-        elif hand_2 == hand[2]:
-            result = -1
-
-    if hand_1 == hand[1]:
-        if hand_2 == hand[0]:
-            result = -1
-
-        elif hand_2 == hand[1]:
-            result = 0
-
-        elif hand_2 == hand[2]:
-            result = 1
-
-    if hand_1 == hand[2]:
-        if hand_2 == hand[0]:
-            result = 1
-
-        elif hand_2 == hand[1]:
-            result = -1
-
-        elif hand_2 == hand[2]:
-            result = 0
-
-    if hand_1 == HAND[0]:
-        result = -1
-        if hand_2 == HAND[0]:
-            result = 0
-
-    if hand_1 == HAND[1]:
-        if rireki_1.count(hand[2]) >=2 and rireki_1.count(hand[1]) >=2 and rireki_1.count(hand[2]) >=2:
-            result = 1
-            if hand_2 == HAND[1]:
-                if rireki_1.count(hand[2]) >=2 and rireki_1.count(hand[1]) >=2 and rireki_1.count(hand[2]) >=2:
-                    result = 0
-                    
-    await asyncio.sleep(0)
-                
+# =========================
+# WebSocket Client
+# =========================
 
 class Client:
 
-    def __init__(self, url):
+    def __init__(self,url):
+
         self.connected = False
         self.messages = []
 
@@ -119,168 +50,338 @@ class Client:
         self.ws.onclose = self.on_close
         self.ws.onerror = self.on_error
 
-    def on_open(self, event):
-        print("接続成功")
+
+    def on_open(self,event):
+
+        print("WebSocket接続成功")
         self.connected = True
 
-    def on_message(self, event):
-        global hand_2,recieve
-        print("受信:", event.data)
-        recieve = 0
-        self.messages.append(event.data)
-        hand_2 = event.data
-        recieve = 1
 
-    def on_close(self, event):
+    def on_message(self,event):
+
+        global hand_2, receive
+
+        print("受信:",event.data)
+
+        hand_2 = event.data
+        receive = 1
+
+
+    def on_close(self,event):
+
         print("切断")
         self.connected = False
 
-    def on_error(self, event):
-        print("エラー")
 
-    def send(self, obj):
+    def on_error(self,event):
+
+        print("WebSocketエラー")
+
+
+    def send(self,data):
+
         if self.connected:
-            self.ws.send(obj)
+
+            self.ws.send(data)
+
+            print("送信:",data)
+
+
+
+# =========================
+# 手の特殊処理
+# =========================
+
+async def check():
+
+    global hand_1
+
+
+    if HAND[0] in rireki_1:
+
+        if hand_1 == HAND[0]:
+
+            if HAND[1] in rireki_1:
+                rireki_1.remove(HAND[1])
+
+        else:
+
+            hand_1 = HAND[1]
+
+
+
+    if HAND[2] in effect:
+
+        if hand_1 == hand[0]:
+            hand_1 = hand[1]
+
+        elif hand_1 == hand[1]:
+            hand_1 = hand[2]
+
+        elif hand_1 == hand[2]:
+            hand_1 = dokuji_1
+
+
+        elif hand_1 == dokuji_1:
+            hand_1 = hand[0]
+
+
+
+    if hand_1 == HAND[2]:
+
+        if HAND[2] in effect:
+            effect.remove(HAND[2])
+
+        else:
+            effect.append(HAND[2])
+
+
+
+    rireki_1.append(hand_1)
+
+    await asyncio.sleep(0)
+
+
+
+# =========================
+# 勝敗判定
+# =========================
+
+async def battle():
+
+    global result
+
+
+    if hand_1 == hand[0]:
+
+        if hand_2 == hand[0]:
+            result=0
+
+        elif hand_2==hand[1]:
+            result=1
+
+        elif hand_2==hand[2]:
+            result=-1
+
+
+
+    elif hand_1 == hand[1]:
+
+        if hand_2==hand[0]:
+            result=-1
+
+        elif hand_2==hand[1]:
+            result=0
+
+        elif hand_2==hand[2]:
+            result=1
+
+
+
+    elif hand_1 == hand[2]:
+
+        if hand_2==hand[0]:
+            result=1
+
+        elif hand_2==hand[1]:
+            result=-1
+
+        elif hand_2==hand[2]:
+            result=0
+
+
+
+    await asyncio.sleep(0)
+
+
+
+# =========================
+# Main
+# =========================
 
 async def main():
-    global hand_1, hand_2, idx,hand_1, dokuji_1,sent,kati,make
 
-    kati, make = 0, 0
+    global idx
+    global cele
+    global hand_1
+    global dokuji_1
+    global receive
 
-    pygame.mouse.set_pos((400, 300))
-    
-    screen = pygame.display.set_mode((800, 600))
+
+    pygame.init()
+
+
+    screen = pygame.display.set_mode(
+        (800,600)
+    )
+
     clock = pygame.time.Clock()
-    font = pygame.font.SysFont(None, 30)
 
-    screen.fill(BLACK)
-
-#    client = Client("wss://jankenserver.my-647.workers.dev/")
-    client = None
+    font = pygame.font.SysFont(None,30)
 
 
-    
-    dokuji_1 = random.choice(HAND)
+    # ★ Cloudflare Workers URL
+    client = Client(
+        "wss://あなたのworker名.workers.dev/"
+    )
 
-    running = True
 
-    while running:
+    dokuji_1=random.choice(HAND)
+
+
+
+    while True:
+
 
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
+
                 pygame.quit()
                 sys.exit()
-                
-        if idx == 0:
-            sent = 0
-                
-            screen.fill(BLACK)
-            txt_1 = font.render("グー", True, WHITE)
-            txt_2 = font.render("チョキ", True, WHITE)
-            txt_3 = font.render("パー", True, WHITE)
-            txt_4 = font.render(dokuji_1, True, WHITE)
-
-            screen.blit(txt_1, [150, 350])
-            screen.blit(txt_2, [300, 400])
-            screen.blit(txt_3, [450, 400])
-            screen.blit(txt_4, [600, 400])
-
-            pygame.display.update()
-
-            if event.type == pygame.KEYDOWN:#選択の切り替え
-                if event.key == pygame.K_SPACE:
-                    if cele == 1:
-                        cele += 1
-                        screen.blit(txt_1, [150, 400])
-                        screen.blit(txt_2, [300, 350])
-
-                    elif cele == 2:
-                        cele += 1
-                        screen.blit(txt_2, [150, 400])
-                        screen.blit(txt_3, [300, 350])
-
-                    elif cele == 3:
-                        cele += 1
-                        screen.blit(txt_3, [150, 400])
-                        screen.blit(txt_4, [300, 350])
-
-                    elif cele == 4:
-                        cele = 1
-                        screen.blit(txt_4, [300, 400])
-                        screen.blit(txt_1, [150, 350])
-
-                pygame.display.update()
-
-                await check()
-                await asyncio.sleep(0)
-                    
-
-                if event.key == pygame.K_RETURN:
-                    if cele == 1:
-                        hand_1 = hand[0]
-
-                    elif cele == 2:
-                        hand_1 = hand[1]
-
-                    elif cele == 3:
-                        hand_1 = hand[2]
-
-                    elif cele ==4:
-                        hand_1 = dokuji_1
 
 
-                    #client.send(hand_1)
-                    if client:
+
+            if idx==0:
+
+
+                if event.type==pygame.KEYDOWN:
+
+
+                    if event.key==pygame.K_SPACE:
+
+
+                        cele+=1
+
+                        if cele>4:
+                            cele=1
+
+
+
+                    if event.key==pygame.K_RETURN:
+
+
+                        if cele==1:
+                            hand_1=hand[0]
+
+                        elif cele==2:
+                            hand_1=hand[1]
+
+                        elif cele==3:
+                            hand_1=hand[2]
+
+                        elif cele==4:
+                            hand_1=dokuji_1
+
+
+
                         client.send(hand_1)
-                    sent = 1
-                    idx = 1
 
 
-        if idx == 1:
-            if sent ==1 and recieve == 1:
-                txt_5 = font.render(hand_2, True, WHITE)
-                screen.blit(txt_5, [250, 200])
+                        receive=0
 
-                pygame.display.update()
+                        idx=1
 
-                idx = 2
 
-        if idx == 2:
+
+        screen.fill(BLACK)
+
+
+
+        if idx==0:
+
+
+            texts=[
+                "グー",
+                "チョキ",
+                "パー",
+                dokuji_1
+            ]
+
+
+            for i,t in enumerate(texts):
+
+                img=font.render(
+                    t,
+                    True,
+                    WHITE
+                )
+
+                screen.blit(
+                    img,
+                    (
+                    150+i*150,
+                    400
+                    )
+                )
+
+
+
+        elif idx==1:
+
+
+            wait=font.render(
+                "相手待ち...",
+                True,
+                WHITE
+            )
+
+            screen.blit(wait,(300,200))
+
+
+            if receive:
+
+                idx=2
+
+
+
+        elif idx==2:
+
+
             await check()
-            await asyncio.sleep(0)
+
             await battle()
-            await asyncio.sleep(0)
-            
-            if 0 == result:
-                txt_6 = font.render("あいこ", True, WHITE)
-                screen.blit(txt_6, [350, 200])
 
-            if result == 1:
-                txt_6 = font.render("勝ち", True, WHITE)
-                screen.blit(txt_6, [350, 200])
-                kati += 1
 
-            if result == -1:
-                txt_6 = font.render("負け", True, WHITE)
-                screen.blit(txt_6, [350, 200])
-                make += 1
 
-            idx = 0
+            if result==1:
 
-        if kati == 3 or make ==3:
-            idx = 3
-                
-        pygame.display.flip()    
+                msg="勝ち"
+
+            elif result==-1:
+
+                msg="負け"
+
+            else:
+
+                msg="あいこ"
+
+
+
+            img=font.render(
+                msg,
+                True,
+                WHITE
+            )
+
+            screen.blit(
+                img,
+                (350,200)
+            )
+
+
+            await asyncio.sleep(2)
+
+            idx=0
+
+
+
+        pygame.display.flip()
+
         clock.tick(60)
+
         await asyncio.sleep(0)
 
 
-asyncio.run(main()) 
 
-                    
-                            
-
-            
-        
-        
-    
+asyncio.run(main())
