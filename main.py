@@ -3,7 +3,7 @@ import pygame
 import asyncio
 import sys
 import random
-from platform import window
+from javascript import WebSocket
 
 idx = 0
 effect = []
@@ -112,7 +112,7 @@ class Client:
         self.connected = False
         self.messages = []
 
-        self.ws = window.WebSocket.new(url)
+        self.ws = WebSocket.new(url)
 
         self.ws.onopen = self.on_open
         self.ws.onmessage = self.on_message
@@ -136,13 +136,25 @@ class Client:
         self.connected = False
 
     def on_error(self, event):
-        print("エラー")
+        print("WebSocketエラー", event)
 
     def send(self, obj):
         if self.connected:
             self.ws.send(obj)
 
 async def main():
+
+    print("main開始")
+
+    pygame.init()
+
+    screen = pygame.display.set_mode((800,600))
+
+    print("画面作成完了")
+
+    client = Client("wss://jankenserver.my-647.workers.dev/")
+
+    print("WebSocket作成完了")
 
     print("main start")
     
