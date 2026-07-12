@@ -10,6 +10,7 @@ effect = []
 rireki_1 = []
 result = 0
 recieve = 0
+cele = 1
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -93,10 +94,10 @@ async def battle():
             result = 0
 
     if hand_1 == HAND[1]:
-        if rireki_1.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
+        if rireki_1.count(hand[2]) >=2 and rireki_!.count(hand[1]) >=2 and rireki_!.count(hand[2]) >=2:
             result = 1
             if hand_2 == HAND[1]:
-                if rireki_1.count(hand[2]) >=2 and rireki.count(hand[1]) >=2 and rireki.count(hand[2]) >=2:
+                if rireki_1.count(hand[2]) >=2 and rireki_1.count(hand[1]) >=2 and rireki_1.count(hand[2]) >=2:
                     result = 0
                     
     await asyncio.sleep(0)
@@ -165,7 +166,6 @@ async def main():
                 sys.exit()
                 
             if idx == 0:
-                cele = 1
                 sent = 0
                 
                 screen.fill(BLACK)
@@ -181,7 +181,7 @@ async def main():
 
                 pygame.display.update()
 
-                if event.type == KEYDOWN:#選択の切り替え
+                if event.type == pygame.KEYDOWN:#選択の切り替え
                     if event.key == pygame.K_SPACE:
                         if cele == 1:
                             cele += 1
