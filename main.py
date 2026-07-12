@@ -9,8 +9,10 @@ idx = 0
 effect = []
 rireki_1 = []
 result = 0
-BLACK = (256, 256, 256)
-WHITEe = (0, 0, 0)
+recieve = 0
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 HAND = ("無限", "創造の儀式", "混逆の魂")
 hand = ["グー", "チョキ", "パー"]
@@ -18,7 +20,7 @@ hand = ["グー", "チョキ", "パー"]
 async def check():#出された手の変化
     global hand_1, rireki_1
 
-    if HAND[0] in rireki:#無限の処理
+    if HAND[0] in rireki_1:#無限の処理
         if hand_1 == HAND[0]:
             rireki.remove(HAND[1])
         else:
@@ -121,8 +123,8 @@ class Client:
         global hand_2,recieve
 #        print("受信:", event.data)
         recieve = 0
-        self.messages.append(data)
-        hand_2 = data
+        self.messages.append(event.data)
+        hand_2 = event.data
         recieve = 1
 
     def on_close(self, event):
@@ -134,20 +136,20 @@ class Client:
 
     def send(self, obj):
         if self.connected:
-            self.ws.send(text)
+            self.ws.send(obj)
 
 async def main():
     global hand_1, hand_2, idx,hand_1, dokuji_1,sent,kati,make
 
     kati, make = 0, 0
 
-    pygame.mouse.set_set.pos((400, 300))
+    pygame.mouse.set_.pos((400, 300))
     
     screen = pygame.display.set_mode((800, 600))
     clock = pygame.time.Clock()
     font = pygame.font.SysFont(None, 30)
 
-    client = WSClient("wss://jankenserver.my-647.workers.dev/")
+    client = Client("wss://jankenserver.my-647.workers.dev/")
 
     dokuji_1 = random.choice(HAND)
 
