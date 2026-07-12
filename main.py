@@ -3,7 +3,7 @@ import pygame
 import asyncio
 import sys
 import random
-from javascript import WebSocket
+from platform import window
 
 idx = 0
 effect = []
@@ -113,7 +113,7 @@ class Client:
         self.connected = False
         self.messages = []
 
-        self.ws = WebSocket.new(url)
+        self.ws = window.WebSocket.new(url)
 
         self.ws.addEventListener("open", self.on_open)
         self.ws.addEventListener("message", self.on_message)
@@ -165,7 +165,7 @@ async def main():
     print("main start")
     
     pygame.init()
-    global hand_1, hand_2, idx,hand_1, dokuji_1,sent,kati,make
+    global hand_1, hand_2, idx, dokuji_1, sent, kati, make
 
     kati, make = 0, 0
 
@@ -176,13 +176,8 @@ async def main():
     font = pygame.font.SysFont(None, 30)
 
     screen.fill(BLACK)
-
-    client = Client("wss://jankenserver.my-647.workers.dev/")
-    print("websocket created")
     
 
-    while not client.connected:
-        await asyncio.sleep(0.1)
 #    client = None
 
 
