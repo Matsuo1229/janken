@@ -11,6 +11,9 @@ rireki_1 = []
 result = 0
 recieve = 0
 cele = 1
+hand_1 = ""
+hand_2 = ""
+dokuji_1 = ""
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -94,7 +97,7 @@ async def battle():
             result = 0
 
     if hand_1 == HAND[1]:
-        if rireki_1.count(hand[2]) >=2 and rireki_!.count(hand[1]) >=2 and rireki_!.count(hand[2]) >=2:
+        if rireki_1.count(hand[2]) >=2 and rireki_1.count(hand[1]) >=2 and rireki_1.count(hand[2]) >=2:
             result = 1
             if hand_2 == HAND[1]:
                 if rireki_1.count(hand[2]) >=2 and rireki_1.count(hand[1]) >=2 and rireki_1.count(hand[2]) >=2:
@@ -103,41 +106,41 @@ async def battle():
     await asyncio.sleep(0)
                 
 
-#class Client:
-#
-#    def __init__(self, url):
-#        self.connected = False
-#        self.messages = []
+class Client:
 
-#        self.ws = window.WebSocket.new(url)
+    def __init__(self, url):
+        self.connected = False
+        self.messages = []
 
-#        self.ws.onopen = self.on_open
-#        self.ws.onmessage = self.on_message
-#        self.ws.onclose = self.on_close
-#        self.ws.onerror = self.on_error
+        self.ws = window.WebSocket.new(url)
 
-#    def on_open(self, event):
-#        print("接続成功")
-#        self.connected = True
+        self.ws.onopen = self.on_open
+        self.ws.onmessage = self.on_message
+        self.ws.onclose = self.on_close
+        self.ws.onerror = self.on_error
 
-#    def on_message(self, event):
-#        global hand_2,recieve
-#        print("受信:", event.data)
-#        recieve = 0
-#        self.messages.append(event.data)
-#        hand_2 = event.data
-#        recieve = 1
+    def on_open(self, event):
+        print("接続成功")
+        self.connected = True
 
-#    def on_close(self, event):
-#        print("切断")
-#        self.connected = False
+    def on_message(self, event):
+        global hand_2,recieve
+        print("受信:", event.data)
+        recieve = 0
+        self.messages.append(event.data)
+        hand_2 = event.data
+        recieve = 1
 
-#    def on_error(self, event):
-#        print("エラー")
+    def on_close(self, event):
+        print("切断")
+        self.connected = False
 
-#    def send(self, obj):
-#        if self.connected:
-#            self.ws.send(obj)
+    def on_error(self, event):
+        print("エラー")
+
+    def send(self, obj):
+        if self.connected:
+            self.ws.send(obj)
 
 async def main():
     global hand_1, hand_2, idx,hand_1, dokuji_1,sent,kati,make
